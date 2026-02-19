@@ -2,6 +2,12 @@ const http = require("http");
 const { handleApiUsers } = require("./routes/apiUsers");
 const { handlePages } = require("./routes/pages");
 
+const express = require("express");
+const path = require("path");
+const app = express();
+app.use("/public", express.static(path.join(__dirname, "public")));
+
+
 const server = http.createServer((req, res) => {
   // 1) API
   const apiHandled = handleApiUsers(req, res);
