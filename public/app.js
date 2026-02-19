@@ -1,63 +1,98 @@
-async function api(path, options) {
-  const res = await fetch(path, {
-    headers: { "Content-Type": "application/json" },
-    ...options,
-  });
-  const ct = res.headers.get("content-type") || "";
-  const data = ct.includes("application/json") ? await res.json() : await res.text();
-  if (!res.ok) throw { status: res.status, data };
-  return data;
-}
-
-// CREATE (POST /api/users)
+// Vytváření letadla
 const createForm = document.getElementById("createForm");
 if (createForm) {
-  createForm.addEventListener("submit", async (e) => {
+  createForm.addEventListener("submit", e => {
     e.preventDefault();
-    const fd = new FormData(createForm);
-    const payload = { name: fd.get("name"), age: Number(fd.get("age")) };
 
-    const msg = document.getElementById("createMsg");
-    try {
-      await api("/api/users", { method: "POST", body: JSON.stringify(payload) });
-      window.location.reload();
-    } catch (err) {
-      msg.textContent = "Chyba: " + JSON.stringify(err.data);
-    }
+    const data = {
+      registration: createForm.registration.value.trim(),
+      model: createForm.model.value.trim(),
+      manufacturer: createForm.manufacturer.value,
+      capacity: Number(createForm.capacity.value),
+      range: Number(createForm.range.value),
+      status: createForm.status.value
+    };
+
+    fetch("/api/aircrafts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(resData => {
+      if (resData.error) {
+        document.getElementById("createMsg").textContent = resData.error;
+      } else {
+        document.getElementById("createMsg").textContent = "Letadlo přidáno!";
+        createForm.reset();
+        setTimeout(() => location.reload(), 500);
+      }
+    })
+    .catch(err => console.error(err));
   });
 }
 
-// EDIT (PUT /api/users/:id)
+// Mazání letadla s potvrzením imatrikulace
+document.querySelectorAll("button[data-delete-id]").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    const id = btn.dataset.deleteId;
+
+    // Načteme letadlo z API, aby jsme získali imatrikulaci
+    const plane = await fetch(`/api/aircrafts/${id}`).then(r => r.json());
+    if (!plane || plane.error) {
+      alert("Letadlo nenalezeno!");
+      return;
+    }
+
+    const confirmRegistration = prompt(`Pro potvrzení smazání napište imatrikulaci letadla: ${plane.registration}`);
+    if (confirmRegistration !== plane.registration) {
+      alert("Imatrikulace se neshoduje. Letadlo nebude smazáno.");
+      return;
+    }
+
+    fetch(`/api/aircrafts/${id}`, { method: "DELETE" })
+      .then(r => r.json())
+      .then(() => location.reload())
+      .catch(console.error);
+  });
+});
+
+// Editace letadla (PUT)
 const editForm = document.getElementById("editForm");
 if (editForm) {
-  editForm.addEventListener("submit", async (e) => {
+  editForm.addEventListener("submit", e => {
     e.preventDefault();
-    const id = editForm.dataset.id;
-    const fd = new FormData(editForm);
-    const payload = { name: fd.get("name"), age: Number(fd.get("age")) };
 
-    const msg = document.getElementById("editMsg");
-    try {
-      await api(`/api/users/${id}`, { method: "PUT", body: JSON.stringify(payload) });
-      window.location.href = `/user/${id}`;
-    } catch (err) {
-      msg.textContent = "Chyba: " + JSON.stringify(err.data);
+    const id = Number(editForm.dataset.id);
+    if (isNaN(id)) {
+      alert("Chyba: neplatné ID letadla");
+      return;
     }
+
+    const data = {
+      registration: editForm.registration.value.trim(),
+      model: editForm.model.value.trim(),
+      manufacturer: editForm.manufacturer.value,
+      capacity: Number(editForm.capacity.value),
+      range: Number(editForm.range.value),
+      status: editForm.status.value
+    };
+
+    fetch(`/api/aircrafts/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(resData => {
+      const msg = document.getElementById("editMsg");
+      if (resData.error) {
+        msg.textContent = resData.error;
+      } else {
+        msg.textContent = "Změny uloženy!";
+        setTimeout(() => window.location.href = `/aircraft/${id}`, 500);
+      }
+    })
+    .catch(err => console.error(err));
   });
 }
-
-// DELETE tlačítka (DELETE /api/users/:id)
-document.addEventListener("click", async (e) => {
-  const btn = e.target.closest("[data-delete-id]");
-  if (!btn) return;
-
-  const id = btn.dataset.deleteId;
-  if (!confirm("Opravdu smazat uživatele #" + id + "?")) return;
-
-  try {
-    await api(`/api/users/${id}`, { method: "DELETE" });
-    window.location.href = "/";
-  } catch (err) {
-    alert("Chyba: " + JSON.stringify(err.data));
-  }
-});

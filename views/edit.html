@@ -1,18 +1,42 @@
 <div class="card">
-  <h2>Upravit uživatele #{{id}}</h2>
+  <h2>Upravit letadlo #{{id}}</h2>
 
   <form id="editForm" data-id="{{id}}">
     <div class="row">
-      <label>Jméno:</label><br />
-      <input name="name" value="{{name}}" required />
+      <label>Imatrikulace:</label><br />
+      <input name="registration" value="{{registration}}" required />
     </div>
     <div class="row">
-      <label>Věk:</label><br />
-      <input type="number" name="age" min="0" value="{{age}}" required />
+      <label>Model:</label><br />
+      <input name="model" value="{{model}}" required />
+    </div>
+    <div class="row">
+      <label>Výrobce:</label><br />
+      <select name="manufacturer">
+        <option value="Boeing" {{manufacturerBoeing}}>Boeing</option>
+        <option value="Airbus" {{manufacturerAirbus}}>Airbus</option>
+        <option value="Embraer" {{manufacturerEmbraer}}>Embraer</option>
+      </select>
+    </div>
+    <div class="row">
+      <label>Kapacita:</label><br />
+      <input type="number" name="capacity" min="1" value="{{capacity}}" />
+    </div>
+    <div class="row">
+      <label>Dolet (km):</label><br />
+      <input type="number" name="range" value="{{range}}" />
+    </div>
+    <div class="row">
+      <label>Stav:</label><br />
+      <select name="status">
+        <option value="active" {{statusActive}}>Aktivní</option>
+        <option value="maintenance" {{statusMaintenance}}>Údržba</option>
+        <option value="retired" {{statusRetired}}>Vyřazeno</option>
+      </select>
     </div>
 
     <button type="submit">Uložit (PUT)</button>
-    <a class="muted" href="/user/{{id}}">Zpět na detail</a>
+    <a class="muted" href="/aircraft/{{id}}">Zpět na detail</a>
     <p class="muted" id="editMsg"></p>
   </form>
 </div>
