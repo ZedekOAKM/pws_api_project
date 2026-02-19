@@ -39,7 +39,7 @@ function handlePages(req, res) {
         <td>${p.registration}</td>
         <td>${p.model}</td>
         <td>${p.capacity}</td>
-        <td>${p.status}</td>
+       <td><span class="badge ${p.status}">${p.status}</span></td>
         <td>
           <a href="/aircraft/${p.id}">Detail</a>
           <a href="/edit/${p.id}">Upravit</a>
@@ -50,7 +50,7 @@ function handlePages(req, res) {
 
     const indexTpl = loadView("index.html");
     const content = render(indexTpl, { rows: rows || `<tr><td colspan="6">Žádná data.</td></tr>` });
-    return sendHtml(res, renderLayout({ title:"Letadla", heading:"Správa letadel", content }));
+    return sendHtml(res, renderLayout({ title:"Letadla", heading:"AirFleet Manager ✈️", content }));
   }
 
   // GET /aircraft/:id
@@ -80,16 +80,23 @@ if (req.url.startsWith("/edit/") && req.method === "GET") {
 
   const tpl = loadView("edit.html");
 
-  // zde nastavíme selected atributy pro selecty
-  const vars = {
-    ...plane,
-    manufacturerBoeing: plane.manufacturer === "Boeing" ? "selected" : "",
-    manufacturerAirbus: plane.manufacturer === "Airbus" ? "selected" : "",
-    manufacturerEmbraer: plane.manufacturer === "Embraer" ? "selected" : "",
-    statusActive: plane.status === "active" ? "selected" : "",
-    statusMaintenance: plane.status === "maintenance" ? "selected" : "",
-    statusRetired: plane.status === "retired" ? "selected" : ""
-  };
+
+const vars = {
+  ...plane,
+  // Selecty pro edit
+  manufacturerBoeing: plane.manufacturer === "Boeing" ? "selected" : "",
+  manufacturerAirbus: plane.manufacturer === "Airbus" ? "selected" : "",
+  manufacturerEmbraer: plane.manufacturer === "Embraer" ? "selected" : "",
+  statusActive: plane.status === "active" ? "selected" : "",
+  statusMaintenance: plane.status === "maintenance" ? "selected" : "",
+  statusRetired: plane.status === "retired" ? "selected" : "",
+  // Text pro badge
+  statusText: plane.status === "active" ? "Aktivní" :
+              plane.status === "maintenance" ? "Údržba" :
+              plane.status === "retired" ? "Vyřazeno" : plane.status
+};
+
+  
 
   const content = render(tpl, vars);
   return sendHtml(res, renderLayout({ title: "Editace", heading: "Editace letadla", content }));

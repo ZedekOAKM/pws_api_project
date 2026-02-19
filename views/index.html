@@ -33,11 +33,11 @@
 
     <div class="field">
       <label>Stav</label>
-      <select name="status">
-        <option value="active">Aktivní</option>
-        <option value="maintenance">Údržba</option>
-        <option value="retired">Vyřazeno</option>
-      </select>
+     <select name="status">
+    <option value="active" {{statusActive}}>Aktivní</option>
+    <option value="maintenance" {{statusMaintenance}}>Údržba</option>
+  <option value="retired" {{statusRetired}}>Vyřazeno</option>
+  </select>
     </div>
 
     <button type="submit" class="primary">Přidat letadlo</button>
@@ -64,7 +64,8 @@
     </tbody>
   </table>
 
-  <p class="muted">
-    CRUD operace probíhají přes API (GET, POST, PUT, DELETE).
-  </p>
+<p class="muted">
+  Operace nad letadly (přidání, úprava, mazání) probíhají přes naše API. 
+
+</p>
 </div>

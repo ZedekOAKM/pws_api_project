@@ -7,5 +7,14 @@
     "capacity": 180,
     "range": 2500,
     "status": "maintenance"
+  },
+  {
+    "id": 4,
+    "registration": "OK-SWK",
+    "model": "Boeing 737-800",
+    "manufacturer": "Boeing",
+    "capacity": 189,
+    "range": 3500,
+    "status": "active"
   }
 ]
