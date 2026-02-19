@@ -11,5 +11,18 @@
   "description": "",
   "devDependencies": {
     "nodemon": "^3.1.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZedekOAKM/pws_api_project.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ZedekOAKM/pws_api_project/issues"
+  },
+  "homepage": "https://github.com/ZedekOAKM/pws_api_project#readme",
+  "dependencies": {
+    "dotenv": "^17.2.4",
+    "node-fetch": "^3.3.2"
   }
 }

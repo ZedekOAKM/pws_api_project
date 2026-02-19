@@ -1,0 +1,70 @@
+<div class="card">
+  <h2>Přidat letadlo</h2>
+
+  <form id="createForm" class="form-grid">
+    <div class="field">
+      <label>Imatrikulace</label>
+      <input name="registration" placeholder="OK-ABC" required />
+    </div>
+
+    <div class="field">
+      <label>Model</label>
+      <input name="model" placeholder="Boeing 737-800" required />
+    </div>
+
+    <div class="field">
+      <label>Výrobce</label>
+      <select name="manufacturer">
+        <option value="Boeing">Boeing</option>
+        <option value="Airbus">Airbus</option>
+        <option value="Embraer">Embraer</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Kapacita</label>
+      <input type="number" name="capacity" min="1" />
+    </div>
+
+    <div class="field">
+      <label>Dolet (km)</label>
+      <input type="number" name="range" />
+    </div>
+
+    <div class="field">
+      <label>Stav</label>
+      <select name="status">
+        <option value="active">Aktivní</option>
+        <option value="maintenance">Údržba</option>
+        <option value="retired">Vyřazeno</option>
+      </select>
+    </div>
+
+    <button type="submit" class="primary">Přidat letadlo</button>
+    <p class="muted" id="createMsg"></p>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Seznam letadel</h2>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Imatrikulace</th>
+        <th>Model</th>
+        <th>Kapacita</th>
+        <th>Stav</th>
+        <th>Akce</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{rows}}
+    </tbody>
+  </table>
+
+  <p class="muted">
+    CRUD operace probíhají přes API (GET, POST, PUT, DELETE).
+  </p>
+</div>
