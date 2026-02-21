@@ -32,12 +32,22 @@ if (createForm) {
   });
 }
 
+function showNotification(message) {
+  const box = document.getElementById("notification");
+  box.textContent = message;
+  box.classList.remove("hidden");
+
+  setTimeout(() => {
+    box.classList.add("hidden");
+  }, 3000);
+}
+
 // Mazání letadla s potvrzením imatrikulace
 document.querySelectorAll("button[data-delete-id]").forEach(btn => {
   btn.addEventListener("click", async () => {
     const id = btn.dataset.deleteId;
 
-    // Načteme letadlo z API, aby jsme získali imatrikulaci
+
     const plane = await fetch(`/api/aircrafts/${id}`).then(r => r.json());
     if (!plane || plane.error) {
       alert("Letadlo nenalezeno!");
@@ -50,10 +60,13 @@ document.querySelectorAll("button[data-delete-id]").forEach(btn => {
       return;
     }
 
-    fetch(`/api/aircrafts/${id}`, { method: "DELETE" })
-      .then(r => r.json())
-      .then(() => location.reload())
-      .catch(console.error);
+ fetch(`/api/aircrafts/${id}`, { method: "DELETE" })
+  .then(r => r.json())
+  .then(() => {
+    showNotification("Letadlo bylo úspěšně odstraněno.");
+    setTimeout(() => location.reload(), 1000);
+  })
+  .catch(console.error);
   });
 });
 
@@ -89,7 +102,7 @@ if (editForm) {
       if (resData.error) {
         msg.textContent = resData.error;
       } else {
-        msg.textContent = "Změny uloženy!";
+         msg.textContent = "Změny uloženy!";
         setTimeout(() => window.location.href = `/aircraft/${id}`, 500);
       }
     })

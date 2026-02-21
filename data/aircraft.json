@@ -1,20 +1,11 @@
 [
   {
-    "id": 3,
-    "registration": "OK-FYD",
-    "model": "A220",
-    "manufacturer": "Airbus",
-    "capacity": 180,
-    "range": 2500,
-    "status": "maintenance"
-  },
-  {
-    "id": 4,
-    "registration": "OK-SWK",
+    "id": 1,
+    "registration": "OK-SWC",
     "model": "Boeing 737-800",
     "manufacturer": "Boeing",
-    "capacity": 189,
-    "range": 3500,
-    "status": "active"
+    "capacity": 185,
+    "range": 250,
+    "status": "maintenance"
   }
 ]
